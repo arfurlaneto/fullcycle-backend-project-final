@@ -1,0 +1,229 @@
+@jwtToken = eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiYWRtaW4tY2F0YWxvZyJdfSwiaWF0IjoxNzE3MjcxNjA0LCJleHAiOjE3MTczNTgwMDR9.ENPcTiwEPv9Ztr-4Lc1xbMtPNjLfyeCOyDjm_lg1cZg4fCBW09I7vZwy_jU-8igiZDpg4rJtfVR1N2tCepadsIjlHchchWhzpWzl0wI965tFfKx1FxClLrLCWzmEVoVK77KZEcwk4Oj3u-cpjOhiKrctIHRFB-oLC0QuNypyePPvKbItvJPphdw7qocHHSKogcGjnwL3IxmENc2jSFgQprcwQjReEnGONrghARzuhujG4HVJA0xtgRCzHdMS1m3YWAM2rP0NUSeeOnp9pByxPoZCcrANHhtF9USMyA2Ul8lhuU0KdfcZIv1Zttver3QEJS7q15byWPbMJd9ZgpZzLQ
+@categoryId = {{createCategory.response.body.$.data.id}}
+@castMemberId = {{createCastMember.response.body.$.data.id}}
+@genreId = {{createGenre.response.body.$.data.id}}
+@videoId = {{createVideo.response.body.$.data.id}}
+
+###
+
+# Create Category
+# @name createCategory
+POST http://localhost:3000/categories
+Content-Type: application/json
+Authorization: Bearer {{jwtToken}}
+
+{
+    "name": "Category {{$timestamp}}",
+    "description": "Description {{$guid}}"
+}
+
+###
+
+# List Categories
+GET http://localhost:3000/categories
+Authorization: Bearer {{jwtToken}}
+
+###
+
+# Get Category
+GET http://localhost:3000/categories/{{categoryId}}
+Authorization: Bearer {{jwtToken}}
+
+###
+
+# Update Category
+PATCH http://localhost:3000/categories/{{categoryId}}
+Content-Type: application/json
+Authorization: Bearer {{jwtToken}}
+
+{
+    "name": "Category {{$timestamp}} (Updated)",
+    "description": "Description  {{$guid}} (Updated)"
+}
+
+### 
+
+# Delete Category
+DELETE http://localhost:3000/categories/{{categoryId}}
+Authorization: Bearer {{jwtToken}}
+
+###
+
+# Create Cast Member
+# @name createCastMember
+POST http://localhost:3000/cast-members
+Content-Type: application/json
+Authorization: Bearer {{jwtToken}}
+
+{
+	"name": "Star Name {{$timestamp}}",
+	"type": 2
+}
+
+###
+
+# List Cast Members
+GET http://localhost:3000/cast-members
+Authorization: Bearer {{jwtToken}}
+
+###
+
+# Get Cast Member
+GET http://localhost:3000/cast-members/{{castMemberId}}
+Authorization: Bearer {{jwtToken}}
+
+###
+
+# Update Cast Member
+PATCH http://localhost:3000/cast-members/{{castMemberId}}
+Content-Type: application/json
+Authorization: Bearer {{jwtToken}}
+
+{
+	"name": "Star Name {{$timestamp}} (Updated)",
+	"type": 2
+}
+
+###
+
+# Delete Cast Member
+DELETE http://localhost:3000/cast-members/{{castMemberId}}
+Authorization: Bearer {{jwtToken}}
+
+###
+
+# Create Genre
+# @name createGenre
+POST http://localhost:3000/genres
+Content-Type: application/json
+Authorization: Bearer {{jwtToken}}
+
+{
+    "name": "Genre {{$timestamp}}",
+    "categories_id": ["{{categoryId}}"]
+}
+
+###
+
+# List Genres
+GET http://localhost:3000/genres
+Content-Type: application/json
+Authorization: Bearer {{jwtToken}}
+
+###
+
+# Get Genre
+GET http://localhost:3000/genres/{{genreId}}
+Authorization: Bearer {{jwtToken}}
+
+###
+
+# Update Genre
+PATCH http://localhost:3000/genres/{{genreId}}
+Content-Type: application/json
+Authorization: Bearer {{jwtToken}}
+
+{
+    "name": "Genre {{$timestamp}} (Updated)",
+    "categories_id": ["{{categoryId}}"]
+}
+
+###
+
+# Delete Genre
+DELETE http://localhost:3000/genres/{{genreId}}
+Content-Type: application/json
+Authorization: Bearer {{jwtToken}}
+
+###
+
+# Create Video
+# @name createVideo
+POST http://localhost:3000/videos
+Content-Type: application/json
+
+{
+    "title": "Video {{$timestamp}}",
+    "description": "Description {{$guid}}",
+    "year_launched": 2020,
+    "is_opened": false,
+    "rating": "L",
+    "duration": 90,
+    "categories_id": [
+        "{{categoryId}}"
+    ],
+    "genres_id": [
+        "{{genreId}}"
+    ],
+    "cast_members_id": [
+        "{{castMemberId}}"
+    ]
+}
+
+
+###
+
+# List Videos
+GET http://localhost:3000/videos
+
+
+###
+
+# List Videos (Filter by Category)
+GET http://localhost:3000/videos?filter%5Bcategories_id%5D={{categoryId}}
+
+###
+
+# List Videos (Filter by Genre)
+GET http://localhost:3000/videos?filter%5Bgenres_id%5D={{genreId}}
+
+###
+
+# List Videos (Filter by Cast Member)
+GET http://localhost:3000/videos?filter%5Bcast_members_id%5D={{castMemberId}}
+
+###
+
+# Get Video
+GET http://localhost:3000/videos/{{videoId}}
+
+###
+
+# Update Video
+PATCH http://localhost:3000/videos/{{videoId}}
+Content-Type: application/json
+
+{
+    "title": "Video {{$timestamp}} (Updated)",
+    "description": "Description {{$guid}} (Updated)",
+    "year_launched": 2020,
+    "is_opened": false,
+    "rating": "L",
+    "duration": 90,
+    "categories_id": [
+        "{{categoryId}}"
+    ],
+    "genres_id": [
+        "{{genreId}}"
+    ],
+    "cast_members_id": [
+        "{{castMemberId}}"
+    ]
+}
+
+###
+# @name uploadVideo
+PATCH http://localhost:3000/videos/{{videoId}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary1234
+
+------WebKitFormBoundary1234
+Content-Disposition: form-data; name="video"; filename="video.mp4"
+Content-Type: video/mp4
+
+< ./package.json
+------WebKitFormBoundary1234--
+
+###
+
+# Delete Video
+DELETE http://localhost:3000/videos/{{videoId}}
